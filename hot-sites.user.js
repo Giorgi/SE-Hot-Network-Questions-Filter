@@ -38,7 +38,9 @@ addGlobalStyle('.delete-site {margin: 2px 6px 0px 0px; }');
 addGlobalStyle('.inline-question {display: inline !important; }');
 
 $(".favicon", '#hot-network-questions').next().addClass('inline-question');
-$(".favicon" ,'#hot-network-questions').before('<span title="Hide questions from this site" class="delete-tag delete-site"></span>');
+$(".favicon", '#hot-network-questions').each(function() {
+    $(this).before('<span title="Hide questions from ' + $(this).attr('title') +'" class="delete-tag delete-site"></span>');
+});
 
 window.addEventListener('load', function() {
     var value = localStorage["hiddenHotSites"];
