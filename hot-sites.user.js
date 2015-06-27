@@ -62,7 +62,7 @@ window.addEventListener('load', function() {
         ul.append('<li><span title="Unhide questions from ' + item.title +'" class="delete-tag unhide-site"></span><div class="favicon ' + item.faviconClass + ' hidden-site"></div>' + item.title.replace('Stack Exchange', '') +'</li>')
     });
 
-    $("ul", '#hot-network-questions').after('<h4>Sites hidden by user</h4>', ul);
+    $('#hot-network-questions').append('<h4 style="margin-top: 10px;">Sites hidden by user</h4>', ul);
     addEventListeners(ul);
 }, false);
 
