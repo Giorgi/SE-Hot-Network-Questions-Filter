@@ -46,6 +46,12 @@ $('.delete-site').click(function(data) {
         if (confirm('Hide questions from '+faviconElement.attr('title') +' ?')) {
             var siteName = splitClass[1];
             $('.' + faviconClass, '#hot-network-questions').parent().hide();   
+
+            var value = localStorage["hiddenHotSites"];
+            var hiddenSites = (value && JSON.parse(localStorage["hiddenHotSites"])) || [];
+            hiddenSites.push(faviconClass);
+
+            localStorage["hiddenHotSites"] = JSON.stringify(hiddenSites);
         }
     }
 });
