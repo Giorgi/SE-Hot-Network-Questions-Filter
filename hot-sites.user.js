@@ -49,8 +49,7 @@ $(".favicon", '#hot-network-questions').each(function() {
 });
 
 window.addEventListener('load', function() {
-    var value = localStorage["hiddenHotSites"];
-    var hiddenSites = (value && JSON.parse(localStorage["hiddenHotSites"])) || [];
+    var hiddenSites = getHiddenSites();
 
     var ul = $('<ul></ul>');
     hiddenSites.forEach(function(item) {
@@ -77,8 +76,7 @@ $('.delete-site').click(function() {
         };
         hideSite(newItem);
         
-        var value = localStorage["hiddenHotSites"];
-        var hiddenSites = (value && JSON.parse(localStorage["hiddenHotSites"])) || [];
+        var hiddenSites = getHiddenSites();
         hiddenSites.push(newItem);
         
         localStorage["hiddenHotSites"] = JSON.stringify(hiddenSites);
@@ -95,15 +93,18 @@ function addEventListeners() {
             $(this).parent().remove();
             unhideSite(faviconClass);
 
-            var value = localStorage["hiddenHotSites"];
-            var hiddenSites = (value && JSON.parse(localStorage["hiddenHotSites"])) || [];
+            var hiddenSites = getHiddenSites();
 
             hiddenSites = $.grep(hiddenSites, function(item) {
                 return  item.faviconClass != faviconClass;
             });
-            
 
             localStorage["hiddenHotSites"] = JSON.stringify(hiddenSites);
         }
     });   
+}
+
+function getHiddenSites() {
+    var value = localStorage["hiddenHotSites"];
+    return (value && JSON.parse(localStorage["hiddenHotSites"])) || [];
 }
