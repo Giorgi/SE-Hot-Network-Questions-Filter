@@ -55,14 +55,12 @@ $('.delete-site').click(function(data) {
     var splitClass = faviconClass.split('-');
 
     if (splitClass.length === 2) {
-        if (confirm('Hide questions from '+faviconElement.attr('title') +' ?')) {
-            hideSite(faviconClass);
-
-            var value = localStorage["hiddenHotSites"];
-            var hiddenSites = (value && JSON.parse(localStorage["hiddenHotSites"])) || [];
-            hiddenSites.push(faviconClass);
-
-            localStorage["hiddenHotSites"] = JSON.stringify(hiddenSites);
-        }
+        hideSite(faviconClass);
+        
+        var value = localStorage["hiddenHotSites"];
+        var hiddenSites = (value && JSON.parse(localStorage["hiddenHotSites"])) || [];
+        hiddenSites.push(faviconClass);
+        
+        localStorage["hiddenHotSites"] = JSON.stringify(hiddenSites);
     }
 });
