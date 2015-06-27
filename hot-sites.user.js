@@ -34,7 +34,7 @@ function addGlobalStyle(css) {
 }
 
 function hideSite(item) {
-    $('.' + item.faviconClass, '#hot-network-questions').parent().hide();
+    $('.' + item.faviconClass, '#hot-network-questions > ul:first').parent().hide();
 }
 
 function unhideSite(faviconClass) {
@@ -64,6 +64,13 @@ window.addEventListener('load', function() {
 
     $('#hot-network-questions').append('<h4 style="margin-top: 10px;">Sites hidden by user</h4>', ul);
     addEventListeners(ul);
+
+    $('.js-show-more', '#hot-network-questions').click(function() {
+        hiddenSites.forEach(function(item) {
+            hideSite(item);
+        });
+    });
+
 }, false);
 
 
