@@ -30,12 +30,18 @@ function addGlobalStyle(css) {
 	head.appendChild(style);
 }
 
-function hideSite(faviconClass) {
-    $('.' + faviconClass, '#hot-network-questions').parent().hide();
+function hideSite(item) {
+    $('.' + item.faviconClass, '#hot-network-questions').parent().hide();
+}
+
+function unhideSite(faviconClass) {
+    $('.' + faviconClass, '#hot-network-questions').parent().show();
 }
 
 addGlobalStyle('.delete-site {margin: 2px 6px 0px 0px; }');
+addGlobalStyle('.unhide-site {margin: 0px 6px 0px 0px; }');
 addGlobalStyle('.inline-question {display: inline !important; }');
+addGlobalStyle('.hidden-site {margin-top: 0px !important; }');
 
 $(".favicon", '#hot-network-questions').next().addClass('inline-question');
 $(".favicon", '#hot-network-questions').each(function() {
@@ -46,23 +52,58 @@ window.addEventListener('load', function() {
     var value = localStorage["hiddenHotSites"];
     var hiddenSites = (value && JSON.parse(localStorage["hiddenHotSites"])) || [];
 
-    hiddenSites.forEach(hideSite);
+    var ul = $('<ul></ul>');
+    hiddenSites.forEach(function(item) {
+        hideSite(item);
+
+        ul.append('<li><span title="Unhide questions from ' + item.title +'" class="delete-tag unhide-site"></span><div class="favicon ' + item.faviconClass + ' hidden-site"></div>' + item.title.replace('Stack Exchange', '') +'</li>')
+    });
+
+    $("ul", '#hot-network-questions').after('<h4>Sites hidden by user:</h4>', ul);
+    addEventListeners();
 }, false);
 
 
-$('.delete-site').click(function(data) {
+$('.delete-site').click(function() {
     var faviconElement = $(this).next();
     var faviconClass = faviconElement.attr('class').split(' ')[1];
 
     var splitClass = faviconClass.split('-');
 
     if (splitClass.length === 2) {
-        hideSite(faviconClass);
+        var newItem = {
+            faviconClass: faviconClass,
+            title: faviconElement.attr('title')
+        };
+        hideSite(newItem);
         
         var value = localStorage["hiddenHotSites"];
         var hiddenSites = (value && JSON.parse(localStorage["hiddenHotSites"])) || [];
-        hiddenSites.push(faviconClass);
+        hiddenSites.push(newItem);
         
         localStorage["hiddenHotSites"] = JSON.stringify(hiddenSites);
     }
 });
+
+function addEventListeners() {
+    $('.unhide-site').click(function() {
+        var faviconElement = $(this).next();
+        var faviconClass = faviconElement.attr('class').split(' ')[1];
+
+        var splitClass = faviconClass.split('-');
+        if (splitClass.length === 2) {
+            $(this).parent().remove();
+            unhideSite(faviconClass);
+
+            var value = localStorage["hiddenHotSites"];
+            var hiddenSites = (value && JSON.parse(localStorage["hiddenHotSites"])) || [];
+
+            hiddenSites = $.grep(hiddenSites, function(item) {
+                return  item.faviconClass != faviconClass;
+            });
+            
+
+            localStorage["hiddenHotSites"] = JSON.stringify(hiddenSites);
+        }
+    });   
+}
