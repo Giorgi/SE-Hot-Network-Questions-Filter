@@ -37,14 +37,14 @@ $(".favicon", '#hot-network-questions').next().addClass('inline-question');
 $(".favicon" ,'#hot-network-questions').before('<span title="Hide questions from this site" class="delete-tag delete-site"></span>');
 
 $('.delete-site').click(function(data) {
-    faviconElement = $(this).next();
-    faviconClass = faviconElement.attr('class').split(' ')[1];
+    var faviconElement = $(this).next();
+    var faviconClass = faviconElement.attr('class').split(' ')[1];
 
-    splitClass = faviconClass.split('-');
+    var splitClass = faviconClass.split('-');
 
     if (splitClass.length === 2) {
         if (confirm('Hide questions from '+faviconElement.attr('title') +' ?')) {
-            siteName = splitClass[1];
+            var siteName = splitClass[1];
             $('.' + faviconClass, '#hot-network-questions').parent().hide();   
         }
     }
