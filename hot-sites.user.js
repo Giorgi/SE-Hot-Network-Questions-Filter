@@ -3,6 +3,9 @@
 // @namespace      stackoverflow
 // @description    Configure sites to show in Hot Network Questions section
 // @version        0.1
+// @require        https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js
+// @grant          GM_getValue
+// @grant          GM_setValue
 // @match          *://stackoverflow.com/*
 // @match          *://serverfault.com/*
 // @match          *://superuser.com/*
@@ -43,6 +46,7 @@ addGlobalStyle('.unhide-site {margin: 0px 6px 0px 0px; }');
 addGlobalStyle('.inline-question {display: inline !important; }');
 addGlobalStyle('.hidden-site {margin-top: 0px !important; }');
 
+
 $(".favicon", '#hot-network-questions').next().addClass('inline-question');
 $(".favicon", '#hot-network-questions').each(function() {
     $(this).before('<span title="Hide questions from ' + $(this).attr('title') +'" class="delete-tag delete-site"></span>');
@@ -79,7 +83,7 @@ $('.delete-site').click(function() {
         var hiddenSites = getHiddenSites();
         hiddenSites.push(newItem);
         
-        localStorage["hiddenHotSites"] = JSON.stringify(hiddenSites);
+        GM_setValue('hiddenHotSites', JSON.stringify(hiddenSites));
 
         $("ul", '#hot-network-questions').slice(1).append('<li><span title="Unhide questions from ' + newItem.title +'" class="delete-tag unhide-site"></span><div class="favicon ' + newItem.faviconClass + ' hidden-site"></div>' + newItem.title.replace('Stack Exchange', '') +'</li>')
     }
@@ -101,12 +105,13 @@ function addEventListeners(element) {
                 return  item.faviconClass != faviconClass;
             });
 
-            localStorage["hiddenHotSites"] = JSON.stringify(hiddenSites);
+            GM_setValue('hiddenHotSites', JSON.stringify(hiddenSites));
         }
     });   
 }
 
 function getHiddenSites() {
-    var value = localStorage["hiddenHotSites"];
-    return (value && JSON.parse(localStorage["hiddenHotSites"])) || [];
+    var value = GM_getValue("hiddenHotSites");
+    
+    return (value && JSON.parse(value)) || [];
 }
