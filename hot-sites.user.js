@@ -30,11 +30,23 @@ function addGlobalStyle(css) {
 	head.appendChild(style);
 }
 
+function hideSite(faviconClass) {
+    $('.' + faviconClass, '#hot-network-questions').parent().hide();
+}
+
 addGlobalStyle('.delete-site {margin: 2px 6px 0px 0px; }');
 addGlobalStyle('.inline-question {display: inline !important; }');
 
 $(".favicon", '#hot-network-questions').next().addClass('inline-question');
 $(".favicon" ,'#hot-network-questions').before('<span title="Hide questions from this site" class="delete-tag delete-site"></span>');
+
+window.addEventListener('load', function() {
+    var value = localStorage["hiddenHotSites"];
+    var hiddenSites = (value && JSON.parse(localStorage["hiddenHotSites"])) || [];
+
+    hiddenSites.forEach(hideSite);
+}, false);
+
 
 $('.delete-site').click(function(data) {
     var faviconElement = $(this).next();
@@ -44,8 +56,7 @@ $('.delete-site').click(function(data) {
 
     if (splitClass.length === 2) {
         if (confirm('Hide questions from '+faviconElement.attr('title') +' ?')) {
-            var siteName = splitClass[1];
-            $('.' + faviconClass, '#hot-network-questions').parent().hide();   
+            hideSite(faviconClass);
 
             var value = localStorage["hiddenHotSites"];
             var hiddenSites = (value && JSON.parse(localStorage["hiddenHotSites"])) || [];
